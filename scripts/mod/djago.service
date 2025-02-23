@@ -1,0 +1,17 @@
+[Unit]
+Description=Djago Service Web App
+After=syslog.target
+After=network.target[Service]
+User=username
+Type=simple
+
+[Service]
+#ExecStart=/usr/bin/java -Djasypt.encryptor.password=P@ssw0rdBko -jar /opt/tomcat/djago/djago.jar --spring.profiles.active=local
+ExecStart=/usr/bin/java -Djasypt.encryptor.password=P@ssw0rdBko -jar /opt/tomcat/djago/djago.jar --spring.profiles.active=mod
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=djago
+
+[Install]
+WantedBy=multi-user.target

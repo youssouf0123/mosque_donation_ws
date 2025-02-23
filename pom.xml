@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<!--		<version>2.7.1</version> THIS IS LATEST BUT DOESNT WORK WITH QueryDSL-->
+		<version>2.3.12.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>org.mandedev.com</groupId>
+	<artifactId>djago-ws</artifactId>
+	<version>0.0.3-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>djago-ws</name>
+	<description>A Web service for an online Store Manager website</description>
+
+	<properties>
+		<!--		<java.version>1.8</java.version>-->
+		<java.version>11</java.version>
+		<spring-cloud.version>Greenwich.SR3</spring-cloud.version>
+		<springversion>3.2.1.RELEASE</springversion>
+		<querydsl.version>4.2.1</querydsl.version>
+	</properties>
+
+	<dependencies>
+		<!-- Add typical dependencies for a web application -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- Add JPA support -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>${querydsl.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.13.Final</version>
+		</dependency>
+		<!-- Add Hikari Connection Pooling support -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<!-- Add H2 database support [for running with local profile] -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Add MySQL database support [for running with PRODUCTION profile] -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<!-- <version>3.5</version> -->
+		</dependency>
+
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.21</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>29.0-jre</version>
+		</dependency>
+
+		<!-- https://www.codejava.net/frameworks/spring-boot/spring-boot-password-encryption -->
+		<dependency>
+			<groupId>com.github.ulisesbocchio</groupId>
+			<artifactId>jasypt-spring-boot-starter</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<finalName>djago</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<layers>
+						<enabled>true</enabled>
+						<configuration>${project.basedir}/src/layers.xml</configuration>
+					</layers>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--Plugin for query-dsl-->
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<!-- https://medium.com/@derrya/maven-profile-spring-boot-properties-a34f2b2bb386 -->
+	<profiles>
+
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						</plugin>
+					<plugin>
+						<groupId>com.github.ulisesbocchio</groupId>
+						<artifactId>jasypt-maven-plugin</artifactId>
+						<version>3.0.3</version>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>template.docx</exclude>
+							<exclude>returns_template.docx</exclude>							
+						</excludes>
+					</resource>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>false</filtering>
+						<includes>
+							<include>template.docx</include>
+							<include>returns_template.docx</include>														
+						</includes>
+					</resource>					
+				</resources>
+			</build>
+			<properties>
+				<activatedProperties>local</activatedProperties>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>mod</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.0</version>
+					</plugin>
+					<plugin>
+						<groupId>com.mysema.maven</groupId>
+						<artifactId>apt-maven-plugin</artifactId>
+						<version>1.1.3</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>process</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<version>2.2.0</version>
+						<executions>
+							<execution>
+								<id>generate-rpm</id>
+								<phase>package</phase>
+								<goals>
+									<goal>rpm</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+							<license>GPL (c) 2005, SWWDC</license>
+							<distribution>MandeDev djago WS</distribution>
+							<group>Application/WS</group>
+
+							<mappings>
+								<mapping>
+									<directory>/opt/tomcat/djago</directory>
+									<dirmode>755</dirmode>
+								</mapping>
+
+								<mapping>
+									<directory>/opt/tomcat/djago</directory>
+									<filemode>755</filemode>
+									<sources>
+										<source>
+											<location>target/djago.jar</location>
+										</source>
+									</sources>
+								</mapping>
+
+								<mapping>
+									<directory>/etc/systemd/system</directory>
+									<filemode>755</filemode>
+									<sources>
+										<source>
+											<location>scripts/mod/djago.service</location>
+										</source>
+									</sources>
+								</mapping>
+							</mappings>
+
+							<preinstallScriptlet>
+								<scriptFile>scripts/preinstall.sh</scriptFile>
+							</preinstallScriptlet>
+							
+							<postinstallScriptlet>
+								<script>systemctl daemon-reload</script>
+							</postinstallScriptlet>
+														
+						</configuration>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>template.docx</exclude>
+							<exclude>returns_template.docx</exclude>							
+						</excludes>
+					</resource>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>false</filtering>
+						<includes>
+							<include>template.docx</include>
+							<include>returns_template.docx</include>														
+						</includes>
+					</resource>					
+				</resources>
+			</build>
+			<properties>
+				<activatedProperties>mod</activatedProperties>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>prod</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>djago</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.0</version>
+					</plugin>
+					<!--Plugin for query-dsl-->
+					<plugin>
+						<groupId>com.mysema.maven</groupId>
+						<artifactId>apt-maven-plugin</artifactId>
+						<version>1.1.3</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>process</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<version>2.2.0</version>
+						<executions>
+							<execution>
+								<id>generate-rpm</id>
+								<phase>package</phase>
+								<goals>
+									<goal>rpm</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+						
+							<license>GPL (c) 2005, SWWDC</license>
+							<distribution>djago WS</distribution>
+							<group>Application/WS</group>
+
+							<mappings>
+								<mapping>
+									<directory>/opt/tomcat/djago</directory>
+									<dirmode>755</dirmode>
+								</mapping>
+
+								<mapping>
+									<directory>/opt/tomcat/djago</directory>
+									<filemode>755</filemode>
+									<sources>
+										<source>
+											<location>target/djago.jar</location>
+										</source>
+									</sources>
+								</mapping>
+
+								<mapping>
+									<directory>/etc/systemd/system</directory>
+									<filemode>755</filemode>
+									<sources>
+										<source>
+											<location>scripts/prod/djago.service</location>
+										</source>
+									</sources>
+								</mapping>
+							</mappings>
+
+							<prepareScriptlet>
+								<script>echo "preparing ${project.name}"</script>
+							</prepareScriptlet>
+							
+							<preinstallScriptlet>
+								<scriptFile>scripts/preinstall.sh</scriptFile>
+								<!--<script>echo "installing ${project.name} now!"</script>
+								<script>mkdir /var/log/djago</script>
+								<script>chmod u+rw /var/log/djago</script>-->
+							</preinstallScriptlet>
+							
+							<postinstallScriptlet>
+								<script>systemctl daemon-reload</script>
+							</postinstallScriptlet>
+							
+						</configuration>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+						<excludes>
+							<exclude>template.docx</exclude>
+							<exclude>returns_template.docx</exclude>							
+						</excludes>
+					</resource>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>false</filtering>
+						<includes>
+							<include>template.docx</include>
+							<include>returns_template.docx</include>														
+						</includes>
+					</resource>					
+				</resources>
+			</build>
+			<properties>
+				<activatedProperties>prod</activatedProperties>
+			</properties>
+		</profile>
+		
+	</profiles>
+</project>
