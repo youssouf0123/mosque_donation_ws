@@ -25,40 +25,11 @@ public class Product implements Serializable {
 	@NotEmpty
 	@Column
 	private String name;
-	private String description;
-	private Double price;
-	private String image;
+	private String phone;
+	private String donation_type;
 	private Integer quantity;
 
 	public Product() {	}
-
-//	public Product(String name, Integer quantity, String image, Double price, Long id) {
-//		this.price = price;
-//		this.quantity = quantity;
-//		this.image = image;
-//		this.name = name;
-//		this.id = id;
-//	}
-//
-//	public Product(String name, Integer quantity, String image, Double price) {
-//		this.price = price;
-//		this.quantity = quantity;
-//		this.image = image;
-//		this.name = name;
-//	}
-//
-//	public Product(String name, Integer quantity, String image, Long id) {
-//		this.name = name;
-//		this.id = id;
-//		this.quantity = quantity;
-//		this.image = image;
-//	}
-//
-//	public Product(String name, Integer quantity, String image) {
-//		this.name = name;
-//		this.image = image;
-//		this.quantity = quantity;
-//	}
 
 	public Long getId() {
 		return id;
@@ -76,28 +47,20 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public Double getPrice() {
-		return price;
+	public String getDonation_type() {
+		return donation_type;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
+	public void setDonation_type(String donation_type) {
+		this.donation_type = donation_type;
 	}
 
 	public Integer getQuantity() {
@@ -110,8 +73,8 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price + ", image="
-				+ image + ", quantity=" + quantity + "]";
+		return "Product [id=" + id + ", name=" + name + ", phone=" + phone + ", donation_type=" + donation_type
+				+ ", quantity=" + quantity + "]";
 	}
-	
+
 }

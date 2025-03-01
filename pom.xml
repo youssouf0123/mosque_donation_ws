@@ -12,11 +12,11 @@
 	</parent>
 
 	<groupId>org.mandedev.com</groupId>
-	<artifactId>djago-ws</artifactId>
+	<artifactId>mosque-ws</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>djago-ws</name>
+	<name>mosque-ws</name>
 	<description>A Web service for an online Store Manager website</description>
 
 	<properties>
@@ -144,7 +144,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>djago</finalName>
+		<finalName>mosque</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -284,21 +284,21 @@
 
 						<configuration>
 							<license>GPL (c) 2005, SWWDC</license>
-							<distribution>MandeDev djago WS</distribution>
+							<distribution>MandeDev mosque WS</distribution>
 							<group>Application/WS</group>
 
 							<mappings>
 								<mapping>
-									<directory>/opt/tomcat/djago</directory>
+									<directory>/opt/tomcat/mosque</directory>
 									<dirmode>755</dirmode>
 								</mapping>
 
 								<mapping>
-									<directory>/opt/tomcat/djago</directory>
+									<directory>/opt/tomcat/mosque</directory>
 									<filemode>755</filemode>
 									<sources>
 										<source>
-											<location>target/djago.jar</location>
+											<location>target/mosque.jar</location>
 										</source>
 									</sources>
 								</mapping>
@@ -308,7 +308,7 @@
 									<filemode>755</filemode>
 									<sources>
 										<source>
-											<location>scripts/mod/djago.service</location>
+											<location>scripts/mod/mosque.service</location>
 										</source>
 									</sources>
 								</mapping>
@@ -355,7 +355,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>djago</finalName>
+				<finalName>mosque</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.springframework.boot</groupId>
@@ -402,21 +402,21 @@
 						<configuration>
 						
 							<license>GPL (c) 2005, SWWDC</license>
-							<distribution>djago WS</distribution>
+							<distribution>mosque WS</distribution>
 							<group>Application/WS</group>
 
 							<mappings>
 								<mapping>
-									<directory>/opt/tomcat/djago</directory>
+									<directory>/opt/tomcat/mosque</directory>
 									<dirmode>755</dirmode>
 								</mapping>
 
 								<mapping>
-									<directory>/opt/tomcat/djago</directory>
+									<directory>/opt/tomcat/mosque</directory>
 									<filemode>755</filemode>
 									<sources>
 										<source>
-											<location>target/djago.jar</location>
+											<location>target/mosque.jar</location>
 										</source>
 									</sources>
 								</mapping>
@@ -426,7 +426,7 @@
 									<filemode>755</filemode>
 									<sources>
 										<source>
-											<location>scripts/prod/djago.service</location>
+											<location>scripts/prod/mosque.service</location>
 										</source>
 									</sources>
 								</mapping>
@@ -439,8 +439,8 @@
 							<preinstallScriptlet>
 								<scriptFile>scripts/preinstall.sh</scriptFile>
 								<!--<script>echo "installing ${project.name} now!"</script>
-								<script>mkdir /var/log/djago</script>
-								<script>chmod u+rw /var/log/djago</script>-->
+								<script>mkdir /var/log/mosque</script>
+								<script>chmod u+rw /var/log/mosque</script>-->
 							</preinstallScriptlet>
 							
 							<postinstallScriptlet>

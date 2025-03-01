@@ -1,35 +1,16 @@
 --INSERT INTO product (id, name, description, quantity, price) VALUES
-INSERT INTO product (name, description, price, quantity) values 
-('Sugar', '', 19.99, 10),
-( 'Oil', '', 9.99, 5),
-('Milk', '', 29.99, 30),
-( 'Rice', '', 19.99, 10),
-( 'Ciment', '', 9.99, 5),
-('Bananan', '', 29.99, 30),
-('Carrot', '', 19.99, 10),
-('Potatoes', '', 9.99, 5),
-('Plastics', '', 29.99, 30),
-( 'Candy', '', 19.99, 10),
-('Yogar', '', 9.99, 5),
-('Tomatoes', '', 29.99, 30),
-( 'Apple', '', 19.99, 10),
-( 'Tire', '', 9.99, 5),
-('Brown Bag', '', 29.99, 30),
-('Black Bag', '', 19.99, 10),
-( 'Nido', '', 9.99, 5),
-('Cafe', '', 29.99, 30),
-( 'Small Rice', '', 19.99, 10),
-( 'Sardine', '', 9.99, 5),
-('Corn Beef', '', 29.99, 30),
-('Shoes', '', 19.99, 10),
-('Vasiline', '', 9.99, 5),
-('Bar Soap', '', 29.99, 30),
-( 'Liquid Soap', '', 19.99, 10),
-('Short Plastic', '', 9.99, 5),
-('Light Ball', '', 29.99, 30),
-( 'Cigaratte', '', 19.99, 10),
-( 'Bread', '', 9.99, 5),
-('Farine', '', 29.99, 30);
+INSERT INTO product (name, phone, donation_type, quantity) VALUES
+('John Doe', '1234567890', 'Clothes', 10),
+('Jane Smith', '0987654321', 'Food', 20),
+('Michael Brown', '1122334455', 'Books', 15),
+('Emily Johnson', '6677889900', 'Toys', 8),
+('Chris Lee', '1231231234', 'Electronics', 5),
+('Sarah Wilson', '3213214321', 'Furniture', 2),
+('David Kim', '5556667777', 'Medical Supplies', 30),
+('Laura Scott', '8889990000', 'Shoes', 12),
+('James White', '4445556666', 'Food', 25),
+('Olivia Davis', '7778889999', 'Clothes', 18);
+
   
 --INSERT INTO customer (firstName, lastName, phoneNum, emailAddress) VALUES
 --  ('Jhon', 'Doe', '2222222', 'jhon@doe.com'),
