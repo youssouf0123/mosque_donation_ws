@@ -1,6 +1,7 @@
 package org.djago.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.djago.model.Product;
 import org.djago.repositories.ProductRepository;
@@ -37,5 +38,10 @@ public class ProductServiceImpl implements ProductService {
 	
 	public void deleteProduct(Long id) {
 		productRepository.deleteById(id);
+	}
+
+	@Override
+	public List<ProductTypeQty> getProductQuantityAndType() {
+		return productRepository.getProductQuantityAndType();
 	}
 }

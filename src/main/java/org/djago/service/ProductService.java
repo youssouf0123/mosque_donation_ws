@@ -3,12 +3,13 @@ package org.djago.service;
 import java.util.List;
 
 import org.djago.model.Product;
-import org.djago.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 public interface ProductService {
 
 	public List<Product> findAllProducts();
+	
+	public List<ProductTypeQty> getProductQuantityAndType();
 	
 	public Product getProductById(Long id);
 	

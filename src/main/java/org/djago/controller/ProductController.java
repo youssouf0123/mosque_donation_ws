@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import org.djago.model.Product;
 import org.djago.service.ProductService;
+import org.djago.service.ProductTypeQty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,14 @@ public class ProductController {
 		List<Product> prcdList = productService.findAllProducts();
 		return new ResponseEntity<>(prcdList, HttpStatus.OK);
 	}
+	
+	@GetMapping("/typeQty")
+	public ResponseEntity<List<ProductTypeQty>> getProductQuantityAndType(){
+		List<ProductTypeQty> prcdTypeQtyList = productService.getProductQuantityAndType();
+		logger.info("Youssouf prcdTypeQtyList : " + prcdTypeQtyList);
+		return new ResponseEntity<>(prcdTypeQtyList, HttpStatus.OK);
+	}
+	
 	
 	@GetMapping("/find/{id}")
 	public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
