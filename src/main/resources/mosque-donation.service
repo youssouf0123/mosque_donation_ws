@@ -1,0 +1,15 @@
+[Unit]
+Description=Mosque Donation Spring Boot Application
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/java -jar /opt/mosque-donation/mosque-donation.jar
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

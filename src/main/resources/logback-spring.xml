@@ -1,105 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--https://springframework.guru/using-logback-spring-boot/-->
+<!--https://mkyong.com/logging/logback-xml-example/-->
+<!--https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.logging-->
+<!--https://medium.com/@nikitashahu/logging-in-spring-boot-b685827ce702-->
+<!--https://www.codingame.com/playgrounds/4497/configuring-logback-with-spring-boot-->
+
+<!--        Log directory permissions-->
+<!--        sudo mkdir -p /var/log/mosque-donation-->
+<!--        sudo chmod -R 777 /var/log/mosque-donation  # Adjust permissions as needed-->
+
 <configuration>
 
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOGS" value="/var/log/mosque-donation" />
 
-	<springProfile name="local">
-	
-		<include
-			resource="org/springframework/boot/logging/logback/console-appender.xml" />
-	
-		<root level="INFO">
-			<appender-ref ref="CONSOLE" />
-		</root>
-	
-	</springProfile>
-	
-<!--     <springProfile name="local">
-        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        
-            <file>/var/log/djago/djago.log</file>
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%magenta(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1}): %msg%n%throwable</Pattern>
+        </layout>
+    </appender>
 
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>logs/archived/djago.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-                each archived file, size max 10MB
-                <maxFileSize>10MB</maxFileSize>
-                total size of all archive files, if total size > 20GB, it will delete old archived file
-                <totalSizeCap>20GB</totalSizeCap>
-                60 days to keep
-                <maxHistory>60</maxHistory>
-            </rollingPolicy>
-
-            <encoder>
-                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
-            </encoder>
-        </appender>
-
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.djago" level="DEBUG"/>
-        
-        <root level="ERROR">
-            <appender-ref ref="FILE-ROLLING"/>
-        </root>        
-    </springProfile> -->
-
-    <springProfile name="mod">
-
-        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        
-            <file>/var/log/djago/djago-mod.log</file>
-
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>logs/archived/djago-mod.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-                <!-- each archived file, size max 10MB -->
-                <maxFileSize>10MB</maxFileSize>
-                <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
-                <totalSizeCap>20GB</totalSizeCap>
-                <!-- 60 days to keep -->
-                <maxHistory>60</maxHistory>
-            </rollingPolicy>
-
-            <encoder>
-                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
-            </encoder>
-        </appender>
-
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.djago" level="DEBUG"/>
-        
-        <root level="ERROR">
-            <appender-ref ref="FILE-ROLLING"/>
-        </root>
-        
-    </springProfile>
-    
+    <!-- Rolling File Appender (Only for 'prod' profile) -->
     <springProfile name="prod">
-
-        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        
-            <file>/var/log/djago/djago-prod.log</file>
-
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>logs/archived/djago-prod.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-                <!-- each archived file, size max 10MB -->
-                <maxFileSize>10MB</maxFileSize>
-                <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
-                <totalSizeCap>20GB</totalSizeCap>
-                <!-- 60 days to keep -->
-                <maxHistory>60</maxHistory>
-            </rollingPolicy>
-
-            <encoder>
-                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+        <appender name="RollingFile"
+                  class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOGS}/mosque-donation-mod.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>%d %p %C{1} [%t] %m%n</Pattern>
             </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOGS}/archived/mosque-donation-mod-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
         </appender>
 
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.djago" level="DEBUG"/>
-        
-        <root level="ERROR">
-            <appender-ref ref="FILE-ROLLING"/>
+        <!-- Ensure root logger is configured -->
+        <root level="info">
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Console"/>
         </root>
-        
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Console"/>
+        </logger>
+    </springProfile>
+
+    <!-- Default Logging (for non-prod profiles) -->
+    <springProfile name="!prod">
+        <root level="info">
+            <appender-ref ref="Console"/>
+        </root>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
     </springProfile>
 
 </configuration>

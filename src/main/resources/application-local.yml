@@ -1,0 +1,46 @@
+# local application Config!
+---
+server:
+  port: 8080
+  servlet:
+    context-path: /koumanafamaPlayer
+---
+spring:
+  profiles: local, default
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 128MB
+      max-request-size: 128MB
+  mvc:
+    contentnegotiation:
+      favor-path-extension: false
+      favor-parameter: false
+      media-types:
+        json: application/json
+      default-content-type: application/json
+
+datasource:
+  sampleapp:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+    defaultSchema:
+    maxPoolSize: 10
+    hibernate:
+      hbm2ddl.method: create-drop
+      show_sql: true
+      format_sql: true
+      dialect: org.hibernate.dialect.H2Dialect
+
+koumanafama:
+  media:
+    url:     'audio/'
+    uploads: '/Users/damancamara/workspace/koumanafamaPlayer/src/main/resources'
+  aws:
+    s3:
+      bucket-name: 'koumanafama-366550255936-us-east-1-dev-files'
+      region: 'us-east-1'
+    cloudfront:
+      domain: 'https://d123456789.cloudfront.net'
