@@ -1,9 +1,9 @@
 # local application Config!
 ---
 server:
-  port: 8080
+  port: 8081
   servlet:
-    context-path: /koumanafamaPlayer
+    context-path: /mosque-donation
 ---
 spring:
   profiles: local, default

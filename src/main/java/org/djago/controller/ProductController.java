@@ -30,91 +30,91 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/product")
 public class ProductController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-	@Autowired
-	private ProductService productService;
+    @Autowired
+    private ProductService productService;
 
-	@GetMapping("/all")
-	public ResponseEntity<List<Product>> getAllProduct(){
-		List<Product> prcdList = productService.findAllProducts();
-		return new ResponseEntity<>(prcdList, HttpStatus.OK);
-	}
-	
-	@GetMapping("/typeQty")
-	public ResponseEntity<List<ProductTypeQty>> getProductQuantityAndType(){
-		List<ProductTypeQty> prcdTypeQtyList = productService.getProductQuantityAndType();
-		logger.info("Youssouf prcdTypeQtyList : " + prcdTypeQtyList);
-		return new ResponseEntity<>(prcdTypeQtyList, HttpStatus.OK);
-	}
-	
-	
-	@GetMapping("/find/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
-		Product prcd = productService.getProductById(id);
-		return new ResponseEntity<Product>(prcd, HttpStatus.OK);
-	}
-	
-	@PostMapping("/add")
-	//@RequestMapping(value = "add", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<?> addProduct(@RequestBody Product prcd){
-		 Set<String> productList = productService.findAllProducts().stream().map(Product::getName).map(x->x.toLowerCase()).collect(Collectors.toCollection(TreeSet::new));
-		 boolean isProductNameExist = productList.contains(prcd.getName().toLowerCase());
-		 Product newPrcd  = prcd;
-		 logger.info("Youssouf isProductNameExist : " + isProductNameExist);
-		 if(!isProductNameExist)
-			 newPrcd = productService.addProduct(prcd);
-		return new ResponseEntity<>(newPrcd, HttpStatus.CREATED);
-	}
-	
-	@PutMapping("/update")
-	public ResponseEntity<Product> updateProduct(@RequestBody Product prcd){
-		Set<String> productList = productService.findAllProducts().stream().map(Product::getName).map(x->x.toLowerCase()).collect(Collectors.toCollection(TreeSet::new));
-		Map<String, Long> mapNameId = productService.findAllProducts().stream()
-				.collect(Collectors.toMap(Product::getName, Product::getId));
-		
-		
-		boolean isProductUpdatable = false;
+    @GetMapping("/all")
+    public ResponseEntity<List<Product>> getAllProduct() {
+        List<Product> prcdList = productService.findAllProducts();
+        return new ResponseEntity<>(prcdList, HttpStatus.OK);
+    }
 
-		logger.info("Youssouf Product prcd : " + prcd);
-		logger.info("Youssouf Product mapNameId : " + mapNameId);
+    @GetMapping("/typeQty")
+    public ResponseEntity<List<ProductTypeQty>> getProductQuantityAndType() {
+        List<ProductTypeQty> prcdTypeQtyList = productService.getProductQuantityAndType();
+        logger.info("Youssouf prcdTypeQtyList : " + prcdTypeQtyList);
+        return new ResponseEntity<>(prcdTypeQtyList, HttpStatus.OK);
+    }
 
-		//This will prevent to edit a product to an existing product
-		for (String str : mapNameId.keySet()) {
-			if (str.equalsIgnoreCase(prcd.getName())) {
-				if (mapNameId.get(str) == prcd.getId()) {
-					isProductUpdatable = true;
-				}
-				break;
-			}
-		}
-		
-		//This will allow you to edit the same product
-		if(!isProductUpdatable) {
-			for (Long id : mapNameId.values()) {
-				if (id == prcd.getId()) {
-					if (!productList.contains(prcd.getName().toLowerCase())) {
-						isProductUpdatable = true;
-					}
-					break;
-				}
-			}
-		}
 
-		Product updatePrcd = prcd;
-		logger.info("Youssouf isProductNameExist : " + isProductUpdatable);
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
+        Product prcd = productService.getProductById(id);
+        return new ResponseEntity<Product>(prcd, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    //@RequestMapping(value = "add", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<?> addProduct(@RequestBody Product prcd) {
+        Set<String> productList = productService.findAllProducts().stream().map(Product::getName).map(x -> x.toLowerCase()).collect(Collectors.toCollection(TreeSet::new));
+        boolean isProductNameExist = productList.contains(prcd.getName().toLowerCase());
+        Product newPrcd = prcd;
+        logger.info("Youssouf isProductNameExist : " + isProductNameExist);
+        if (!isProductNameExist)
+            newPrcd = productService.addProduct(prcd);
+        return new ResponseEntity<>(newPrcd, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product prcd) {
+
+        Set<String> productList = productService.findAllProducts().stream().map(Product::getName).map(x -> x.toLowerCase()).collect(Collectors.toCollection(TreeSet::new));
+        Map<String, Long> mapNameId = productService.findAllProducts().stream()
+                .collect(Collectors.toMap(Product::getName, Product::getId));
+
+        boolean isProductUpdatable = false;
+
+        logger.debug("Youssouf Product prcd : " + prcd);
+        logger.debug("Youssouf Product mapNameId : " + mapNameId);
+
+        //This will prevent to edit a product to an existing product
+        for (String str : mapNameId.keySet()) {
+            if (str.equalsIgnoreCase(prcd.getName())) {
+                if (mapNameId.get(str) == prcd.getId()) {
+                    isProductUpdatable = true;
+                }
+                break;
+            }
+        }
+
+        //This will allow you to edit the same product
+        if (!isProductUpdatable) {
+            for (Long id : mapNameId.values()) {
+                if (id == prcd.getId()) {
+                    if (!productList.contains(prcd.getName().toLowerCase())) {
+                        isProductUpdatable = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        Product updatePrcd = prcd;
+
+        logger.debug("Youssouf isProductNameExist : " + isProductUpdatable);
+
 		if (isProductUpdatable) {
-			updatePrcd = productService.updateProduct(prcd);
-		} else {
-			updatePrcd.setId(null);
-		}
+            updatePrcd = productService.updateProduct(prcd);
+        }
 
-		return new ResponseEntity<>(updatePrcd, HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id){
-		productService.deleteProduct(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+        return new ResponseEntity<>(updatePrcd, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+        productService.deleteProduct(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

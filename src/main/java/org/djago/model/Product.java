@@ -1,23 +1,15 @@
 package org.djago.model;
 
-import java.io.Serializable;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "product")
-public class Product implements Serializable {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class Product extends AbstractEntity implements Serializable {
 
 	@NotEmpty
 	@Column
@@ -26,14 +18,8 @@ public class Product implements Serializable {
 	private String donation_type;
 	private Integer quantity;
 
-	public Product() {	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public Product() {
+		super();
 	}
 
 	public String getName() {
@@ -70,7 +56,7 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", phone=" + phone + ", donation_type=" + donation_type
+		return "Product [id=" + super.getId() + ", name=" + name + ", phone=" + phone + ", donation_type=" + donation_type
 				+ ", quantity=" + quantity + "]";
 	}
 
