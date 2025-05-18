@@ -8,8 +8,8 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "product")
-public class Product extends AbstractEntity implements Serializable {
+@Table(name = "donation")
+public class Donation extends AbstractEntity implements Serializable {
 
 	@NotEmpty
 	@Column
@@ -18,7 +18,7 @@ public class Product extends AbstractEntity implements Serializable {
 	private String donation_type;
 	private Integer quantity;
 
-	public Product() {
+	public Donation() {
 		super();
 	}
 
@@ -56,7 +56,7 @@ public class Product extends AbstractEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + super.getId() + ", name=" + name + ", phone=" + phone + ", donation_type=" + donation_type
+		return "Donation [id=" + super.getId() + ", name=" + name + ", phone=" + phone + ", donation_type=" + donation_type
 				+ ", quantity=" + quantity + "]";
 	}
 
