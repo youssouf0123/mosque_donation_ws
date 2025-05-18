@@ -7,7 +7,6 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!--		<version>2.7.1</version> THIS IS LATEST BUT DOESNT WORK WITH QueryDSL-->
         <version>2.3.12.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
@@ -32,6 +31,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Add JPA support -->
@@ -86,12 +90,12 @@
             <!-- <version>3.5</version> -->
         </dependency>
 
-        <!-- https://www.codejava.net/frameworks/spring-boot/spring-boot-password-encryption -->
-        <dependency>
-            <groupId>com.github.ulisesbocchio</groupId>
-            <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>3.0.3</version>
-        </dependency>
+		<!-- https://www.codejava.net/frameworks/spring-boot/spring-boot-password-encryption -->
+		<dependency>
+			<groupId>com.github.ulisesbocchio</groupId>
+			<artifactId>jasypt-spring-boot-starter</artifactId>
+			<version>3.0.3</version>
+		</dependency>
 
     </dependencies>
 
@@ -108,31 +112,62 @@
     </dependencyManagement>
 
     <build>
-        <finalName>mosque</finalName>
+        <finalName>mosque-donation</finalName>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <layers>
-                        <enabled>true</enabled>
-                        <configuration>${project.basedir}/src/layers.xml</configuration>
-                    </layers>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>clean</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
-            <!--Plugin for query-dsl-->
+            <!-- Integrate OWASP Dependency-Check to automatically identify CVEs in your build pipeline.-->
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.owasp</groupId>-->
+            <!--                <artifactId>dependency-check-maven</artifactId>-->
+            <!--                <version>8.4.0</version> &lt;!&ndash; Replace with the latest &ndash;&gt;-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <phase>verify</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>check</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
-                <version>1.1.3</version>
+                <version>1.0.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.querydsl</groupId>
+                        <artifactId>querydsl-apt</artifactId>
+                        <version>${querydsl.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -140,201 +175,54 @@
                             <goal>process</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>target/generated-sources/java</outputDirectory>
-                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                            <outputDirectory>target/generated-sources</outputDirectory>
+                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
-    <!-- https://medium.com/@derrya/maven-profile-spring-boot-properties-a34f2b2bb386 -->
     <profiles>
-
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.ulisesbocchio</groupId>
-                        <artifactId>jasypt-maven-plugin</artifactId>
-                        <version>3.0.3</version>
-                    </plugin>
-                </plugins>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
-                        <excludes>
-                            <exclude>template.docx</exclude>
-                            <exclude>returns_template.docx</exclude>
-                        </excludes>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>false</filtering>
-                        <includes>
-                            <include>template.docx</include>
-                            <include>returns_template.docx</include>
-                        </includes>
-                    </resource>
-                </resources>
-            </build>
-            <properties>
-                <activatedProperties>local</activatedProperties>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>mod</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.22.0</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.mysema.maven</groupId>
-                        <artifactId>apt-maven-plugin</artifactId>
-                        <version>1.1.3</version>
-                        <executions>
-                            <execution>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>process</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>target/generated-sources/java</outputDirectory>
-                                    <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>rpm-maven-plugin</artifactId>
-                        <version>2.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>generate-rpm</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>rpm</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-
-                        <configuration>
-                            <license>GPL (c) 2005, SWWDC</license>
-                            <distribution>MandeDev mosque WS</distribution>
-                            <group>Application/WS</group>
-
-                            <mappings>
-                                <mapping>
-                                    <directory>/opt/tomcat/mosque</directory>
-                                    <dirmode>755</dirmode>
-                                </mapping>
-
-                                <mapping>
-                                    <directory>/opt/tomcat/mosque</directory>
-                                    <filemode>755</filemode>
-                                    <sources>
-                                        <source>
-                                            <location>target/mosque.jar</location>
-                                        </source>
-                                    </sources>
-                                </mapping>
-
-                                <mapping>
-                                    <directory>/etc/systemd/system</directory>
-                                    <filemode>755</filemode>
-                                    <sources>
-                                        <source>
-                                            <location>scripts/mod/mosque.service</location>
-                                        </source>
-                                    </sources>
-                                </mapping>
-                            </mappings>
-
-                            <preinstallScriptlet>
-                                <scriptFile>scripts/preinstall.sh</scriptFile>
-                            </preinstallScriptlet>
-
-                            <postinstallScriptlet>
-                                <script>systemctl daemon-reload</script>
-                            </postinstallScriptlet>
-
-                        </configuration>
-                    </plugin>
-                </plugins>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
-                        <excludes>
-                            <exclude>template.docx</exclude>
-                            <exclude>returns_template.docx</exclude>
-                        </excludes>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>false</filtering>
-                        <includes>
-                            <include>template.docx</include>
-                            <include>returns_template.docx</include>
-                        </includes>
-                    </resource>
-                </resources>
-            </build>
-            <properties>
-                <activatedProperties>mod</activatedProperties>
-            </properties>
-        </profile>
-
         <profile>
             <id>prod</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <build>
-                <finalName>mosque</finalName>
+                <finalName>mosque-donation</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                </exclude>
+                            </excludes>
+                        </configuration>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.22.0</version>
-                    </plugin>
-                    <!--Plugin for query-dsl-->
+
                     <plugin>
                         <groupId>com.mysema.maven</groupId>
                         <artifactId>apt-maven-plugin</artifactId>
-                        <version>1.1.3</version>
+                        <version>1.0.8</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.querydsl</groupId>
+                                <artifactId>querydsl-apt</artifactId>
+                                <version>${querydsl.version}</version>
+                            </dependency>
+                        </dependencies>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>
@@ -342,8 +230,8 @@
                                     <goal>process</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>target/generated-sources/java</outputDirectory>
-                                    <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                                    <outputDirectory>target/generated-sources</outputDirectory>
+                                    <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
                                 </configuration>
                             </execution>
                         </executions>
@@ -364,79 +252,46 @@
                         </executions>
 
                         <configuration>
-
                             <license>GPL (c) 2005, SWWDC</license>
-                            <distribution>mosque WS</distribution>
+                            <distribution>Mosque Donation WS</distribution>
                             <group>Application/WS</group>
-
                             <mappings>
                                 <mapping>
-                                    <directory>/opt/tomcat/mosque</directory>
+                                    <directory>/opt/tomcat/mosque-donation</directory>
                                     <dirmode>755</dirmode>
                                 </mapping>
-
                                 <mapping>
-                                    <directory>/opt/tomcat/mosque</directory>
+                                    <directory>/opt/tomcat/mosque-donation</directory>
                                     <filemode>755</filemode>
                                     <sources>
                                         <source>
-                                            <location>target/mosque.jar</location>
+                                            <location>target/mosque-donation.jar</location>
                                         </source>
                                     </sources>
                                 </mapping>
-
                                 <mapping>
                                     <directory>/etc/systemd/system</directory>
-                                    <filemode>755</filemode>
+                                    <filemode>644</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>scripts/prod/mosque.service</location>
+                                            <location>scripts/mosque-donation.service</location>
+                                            <!--                                            <destination>/etc/systemd/system/mosque-donation.service</destination>-->
                                         </source>
                                     </sources>
                                 </mapping>
                             </mappings>
 
-                            <prepareScriptlet>
-                                <script>echo "preparing ${project.name}"</script>
-                            </prepareScriptlet>
-
                             <preinstallScriptlet>
-                                <scriptFile>scripts/preinstall.sh</scriptFile>
-                                <!--<script>echo "installing ${project.name} now!"</script>
-                                <script>mkdir /var/log/mosque</script>
-                                <script>chmod u+rw /var/log/mosque</script>-->
+                                <script>echo "installing ${project.name} now"</script>
                             </preinstallScriptlet>
-
-                            <postinstallScriptlet>
-                                <script>systemctl daemon-reload</script>
-                            </postinstallScriptlet>
-
                         </configuration>
                     </plugin>
                 </plugins>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
-                        <excludes>
-                            <exclude>template.docx</exclude>
-                            <exclude>returns_template.docx</exclude>
-                        </excludes>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>false</filtering>
-                        <includes>
-                            <include>template.docx</include>
-                            <include>returns_template.docx</include>
-                        </includes>
-                    </resource>
-                </resources>
             </build>
-            <properties>
-                <activatedProperties>prod</activatedProperties>
-            </properties>
         </profile>
-
     </profiles>
+
 </project>

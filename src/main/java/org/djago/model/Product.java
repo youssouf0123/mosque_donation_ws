@@ -11,11 +11,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
 @Table(name = "product")
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Product implements Serializable {
 
 	@Id
