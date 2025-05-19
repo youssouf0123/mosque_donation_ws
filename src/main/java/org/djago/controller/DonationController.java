@@ -27,13 +27,13 @@ public class DonationController {
     private DonationService donationService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Donation>> getAllProduct() {
+    public ResponseEntity<List<Donation>> getAllDonation() {
         List<Donation> donations = donationService.findAllDonations();
         return new ResponseEntity<>(donations, HttpStatus.OK);
     }
 
     @GetMapping("/typeQty")
-    public ResponseEntity<List<ProductTypeQty>> getProductQuantityAndType() {
+    public ResponseEntity<List<ProductTypeQty>> getDonationQuantityAndType() {
 
         List<ProductTypeQty> donationTypeQtyList = donationService.getDonationQuantityAndType();
 
@@ -43,7 +43,7 @@ public class DonationController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Donation> getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<Donation> getDonationById(@PathVariable("id") Long id) {
 
         Donation donation = donationService.getDonationById(id);
 
@@ -52,7 +52,7 @@ public class DonationController {
 
     @PostMapping("/add")
     //@RequestMapping(value = "add", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<?> addProduct(@RequestBody Donation prcd) {
+    public ResponseEntity<?> addDonation(@RequestBody Donation prcd) {
 
         Set<String> productList = donationService
                 .findAllDonations().stream()
@@ -73,7 +73,7 @@ public class DonationController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Donation> updateProduct(@RequestBody Donation prcd) {
+    public ResponseEntity<Donation> updateDonation(@RequestBody Donation prcd) {
 
         Set<String> productList = donationService.findAllDonations().stream().map(Donation::getName).map(x -> x.toLowerCase()).collect(Collectors.toCollection(TreeSet::new));
 
@@ -91,7 +91,7 @@ public class DonationController {
         for (String str : mapNameId.keySet())
         {
             if (str.equalsIgnoreCase(prcd.getName())) {
-                if (mapNameId.get(str) == prcd.getId()) {
+                if (mapNameId.get(str).equals(prcd.getId())) {
                     isProductUpdatable = true;
                 }
                 break;
@@ -122,7 +122,7 @@ public class DonationController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteDonation(@PathVariable("id") Long id) {
 
         donationService.deleteDonation(id);
 

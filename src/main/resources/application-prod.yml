@@ -37,14 +37,3 @@ datasource:
       show_sql: true
       format_sql: true
       dialect: org.hibernate.dialect.H2Dialect
-
-koumanafama:
-  media:
-    url:     'https://d5hbr1ssw3zww.cloudfront.net/assets/audio/'
-    uploads: 'https://d5hbr1ssw3zww.cloudfront.net/assets'
-  aws:
-    s3:
-      bucket-name: 'koumanafama-366550255936-us-east-1-dev-files'
-      region: 'us-east-1'
-    cloudfront:
-      domain: 'https://d5hbr1ssw3zww.cloudfront.net'
