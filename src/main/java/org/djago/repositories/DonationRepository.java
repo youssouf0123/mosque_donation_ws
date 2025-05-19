@@ -14,6 +14,6 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
 
 	Optional<Donation> getDonationById(Long id);
 
-    @Query("SELECT p.donation_type AS donationType, SUM(p.quantity) AS totalQuantity FROM Product p GROUP BY p.donation_type")
+    @Query("SELECT d.donation_type AS donationType, SUM(d.quantity) AS totalQuantity FROM Donation d GROUP BY d.donation_type")
     List<ProductTypeQty> getDonationQuantityAndType();
 }

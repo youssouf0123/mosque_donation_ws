@@ -1,4 +1,4 @@
-INSERT INTO product (id, name, phone, donation_type, quantity) VALUES
+INSERT INTO donation (id, name, phone, donation_type, quantity) VALUES
 (1, 'John Doe', '1234567890', 'Clothes', 10),
 (2, 'Jane Smith', '0987654321', 'Food', 20),
 (3, 'Michael Brown', '1122334455', 'Books', 15),
