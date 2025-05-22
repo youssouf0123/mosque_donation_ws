@@ -24,7 +24,7 @@ import javax.persistence.MappedSuperclass;
 public class AbstractEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO) // IDENTITY allows you to leave IDs out of data.sql, instead of AUTO
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY allows you to leave IDs out of data.sql, instead of AUTO
 	private Long id;
 
 	/**

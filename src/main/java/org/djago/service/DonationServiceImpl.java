@@ -32,6 +32,7 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
+    @Transactional
     public Donation addDonation(Donation donation) {
         return donationRepository.save(donation);
     }

@@ -28,14 +28,14 @@ public class DonationController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Donation>> getAllDonation() {
-        List<Donation> donations = donationService.findAllDonations();
+        List<Donation> donations = this.donationService.findAllDonations();
         return new ResponseEntity<>(donations, HttpStatus.OK);
     }
 
     @GetMapping("/typeQty")
     public ResponseEntity<List<ProductTypeQty>> getDonationQuantityAndType() {
 
-        List<ProductTypeQty> donationTypeQtyList = donationService.getDonationQuantityAndType();
+        List<ProductTypeQty> donationTypeQtyList = this.donationService.getDonationQuantityAndType();
 
         logger.debug("Youssouf prcdTypeQtyList : " + donationTypeQtyList);
 
@@ -45,39 +45,43 @@ public class DonationController {
     @GetMapping("/find/{id}")
     public ResponseEntity<Donation> getDonationById(@PathVariable("id") Long id) {
 
-        Donation donation = donationService.getDonationById(id);
+        Donation donation = this.donationService.getDonationById(id);
 
         return new ResponseEntity<>(donation, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    //@RequestMapping(value = "add", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<?> addDonation(@RequestBody Donation prcd) {
+    public ResponseEntity<?> addDonation(@RequestBody Donation donation) {
 
-        Set<String> productList = donationService
+        Set<String> donationsList = this.donationService
                 .findAllDonations().stream()
                 .map(Donation::getName)
                 .map(String::toLowerCase)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        boolean isProductNameExist = productList.contains(prcd.getName().toLowerCase());
+        boolean isExistingDonation = donationsList.contains(donation.getName().toLowerCase());
 
-        Donation newPrcd = prcd;
+        Donation newDonation = donation;
 
-        logger.debug("Youssouf isProductNameExist : " + isProductNameExist);
+        logger.debug("Youssouf - isExistingDonation : " + isExistingDonation);
 
-        if (!isProductNameExist)
-            newPrcd = donationService.addDonation(prcd);
+        if (!isExistingDonation)
+            newDonation = this.donationService.addDonation(donation);
 
-        return new ResponseEntity<>(newPrcd, HttpStatus.CREATED);
+        return new ResponseEntity<>(newDonation, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<Donation> updateDonation(@RequestBody Donation prcd) {
 
-        Set<String> productList = donationService.findAllDonations().stream().map(Donation::getName).map(x -> x.toLowerCase()).collect(Collectors.toCollection(TreeSet::new));
+        Set<String> productList = this.donationService
+                .findAllDonations()
+                .stream()
+                .map(Donation::getName)
+                .map(x -> x.toLowerCase())
+                .collect(Collectors.toCollection(TreeSet::new));
 
-        Map<String, Long> mapNameId = donationService
+        Map<String, Long> mapNameId = this.donationService
                 .findAllDonations()
                 .stream()
                 .collect(Collectors.toMap(Donation::getName, Donation::getId));
@@ -101,7 +105,7 @@ public class DonationController {
         //This will allow you to edit the same product
         if (!isProductUpdatable) {
             for (Long id : mapNameId.values()) {
-                if (id == prcd.getId()) {
+                if (id.equals(prcd.getId())) {
                     if (!productList.contains(prcd.getName().toLowerCase())) {
                         isProductUpdatable = true;
                     }
