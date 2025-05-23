@@ -2,7 +2,7 @@ package org.djago.controller;
 
 import org.djago.model.Donation;
 import org.djago.service.DonationService;
-import org.djago.service.ProductTypeQty;
+import org.djago.service.DonationTypeAndQty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,31 +26,30 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Donation>> getAllDonation() {
         List<Donation> donations = this.donationService.findAllDonations();
         return new ResponseEntity<>(donations, HttpStatus.OK);
     }
 
-    @GetMapping("/typeQty")
-    public ResponseEntity<List<ProductTypeQty>> getDonationQuantityAndType() {
+    @GetMapping("/ByTypeAndQty")
+    public ResponseEntity<List<DonationTypeAndQty>> getDonationsByTypeAndQuantity() {
 
-        List<ProductTypeQty> donationTypeQtyList = this.donationService.getDonationQuantityAndType();
+        List<DonationTypeAndQty> donationTypeQtyList = this.donationService
+                .getDonationsByTypeAndQuantity();
 
-        logger.debug("Youssouf prcdTypeQtyList : " + donationTypeQtyList);
+        logger.debug("Youssouf donationTypeQtyList : " + donationTypeQtyList);
 
         return new ResponseEntity<>(donationTypeQtyList, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Donation> getDonationById(@PathVariable("id") Long id) {
-
         Donation donation = this.donationService.getDonationById(id);
-
         return new ResponseEntity<>(donation, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<?> addDonation(@RequestBody Donation donation) {
 
         Set<String> donationsList = this.donationService
@@ -71,10 +70,10 @@ public class DonationController {
         return new ResponseEntity<>(newDonation, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Donation> updateDonation(@RequestBody Donation prcd) {
+    @PutMapping
+    public ResponseEntity<Donation> updateDonation(@RequestBody Donation donation) {
 
-        Set<String> productList = this.donationService
+        Set<String> donationList = this.donationService
                 .findAllDonations()
                 .stream()
                 .map(Donation::getName)
@@ -86,50 +85,48 @@ public class DonationController {
                 .stream()
                 .collect(Collectors.toMap(Donation::getName, Donation::getId));
 
-        boolean isProductUpdatable = false;
+        boolean isDonationUpdatable = false;
 
-        logger.debug("Youssouf Product prcd : " + prcd);
-        logger.debug("Youssouf Product mapNameId : " + mapNameId);
+        logger.debug("Youssouf donation : " + donation);
+        logger.debug("Youssouf donation mapNameId : " + mapNameId);
 
-        //This will prevent to edit a product to an existing product
+        //This will prevent to edit to an existing donation
         for (String str : mapNameId.keySet())
         {
-            if (str.equalsIgnoreCase(prcd.getName())) {
-                if (mapNameId.get(str).equals(prcd.getId())) {
-                    isProductUpdatable = true;
+            if (str.equalsIgnoreCase(donation.getName())) {
+                if (mapNameId.get(str).equals(donation.getId())) {
+                    isDonationUpdatable = true;
                 }
                 break;
             }
         }
 
-        //This will allow you to edit the same product
-        if (!isProductUpdatable) {
+        //This will allow you to edit the same donation
+        if (!isDonationUpdatable) {
             for (Long id : mapNameId.values()) {
-                if (id.equals(prcd.getId())) {
-                    if (!productList.contains(prcd.getName().toLowerCase())) {
-                        isProductUpdatable = true;
+                if (id.equals(donation.getId())) {
+                    if (!donationList.contains(donation.getName().toLowerCase())) {
+                        isDonationUpdatable = true;
                     }
                     break;
                 }
             }
         }
 
-        Donation updatePrcd = prcd;
+        Donation updatePrcd = donation;
 
-        logger.debug("Youssouf isProductNameExist : " + isProductUpdatable);
+        logger.debug("Youssouf isDonationUpdatable : " + isDonationUpdatable);
 
-        if (isProductUpdatable) {
-            updatePrcd = donationService.updateDonation(prcd);
+        if (isDonationUpdatable) {
+            updatePrcd = donationService.updateDonation(donation);
         }
 
         return new ResponseEntity<>(updatePrcd, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDonation(@PathVariable("id") Long id) {
-
         donationService.deleteDonation(id);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

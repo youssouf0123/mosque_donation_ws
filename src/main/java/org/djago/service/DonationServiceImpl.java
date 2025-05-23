@@ -21,8 +21,8 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public List<ProductTypeQty> getDonationQuantityAndType() {
-        return donationRepository.getDonationQuantityAndType();
+    public List<DonationTypeAndQty> getDonationsByTypeAndQuantity() {
+        return donationRepository.getDonationsByTypeAndQuantity();
     }
 
     @Override

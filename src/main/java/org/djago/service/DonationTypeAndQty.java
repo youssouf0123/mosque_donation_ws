@@ -1,8 +1,7 @@
 package org.djago.service;
 
 
-public interface ProductTypeQty{
+public interface DonationTypeAndQty {
 	String getDonationType();
     Integer getTotalQuantity();
-	
 }

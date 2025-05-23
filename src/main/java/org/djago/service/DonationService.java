@@ -9,7 +9,7 @@ public interface DonationService {
 
 	public List<Donation> findAllDonations();
 	
-	public List<ProductTypeQty> getDonationQuantityAndType();
+	public List<DonationTypeAndQty> getDonationsByTypeAndQuantity();
 	
 	public Donation getDonationById(Long id);
 	
