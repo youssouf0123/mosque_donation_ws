@@ -3,6 +3,7 @@ package org.djago.repositories;
 import org.djago.model.Donation;
 import org.djago.service.DonationTypeAndQty;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DonationRepository extends JpaRepository<Donation, Long> {
+public interface DonationRepository extends JpaRepository<Donation, Long>, JpaSpecificationExecutor<Donation> {
 
 	Optional<Donation> getDonationById(Long id);
 

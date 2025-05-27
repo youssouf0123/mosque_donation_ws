@@ -1,11 +1,16 @@
 package org.djago.controller;
 
 import org.djago.model.Donation;
+import org.djago.repositories.DonationSpecification;
 import org.djago.service.DonationService;
 import org.djago.service.DonationTypeAndQty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +23,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"http://localhost:4200", "http://mande-dev.com"}, maxAge = 3600)
 @RestController
-@RequestMapping("/donation")
+@RequestMapping("/api/v1/donation")
 public class DonationController {
 
     private static final Logger logger = LoggerFactory.getLogger(DonationController.class);
@@ -26,10 +31,27 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
+//    GET /donations?page=0&size=10&filter=donorName:John,amount>100&sort=amount&order=desc
     @GetMapping
-    public ResponseEntity<List<Donation>> getAllDonation() {
-        List<Donation> donations = this.donationService.findAllDonations();
-        return new ResponseEntity<>(donations, HttpStatus.OK);
+    public Object getAllDonationsWithServerSidePagination(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String filter,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String order
+    ) {
+        if (page != null && size != null) {
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size,
+                    order != null && sort != null ?
+                            Sort.by(Sort.Direction.fromString(order), sort) : Sort.unsorted()
+            );
+            Specification<Donation> spec = DonationSpecification.getFilterSpecification(filter);
+            return donationService.findAllWithFilter(spec, pageable);
+        } else {
+            return this.donationService.findAllDonations();
+        }
     }
 
     @GetMapping("/ByTypeAndQty")
@@ -91,8 +113,7 @@ public class DonationController {
         logger.debug("Youssouf donation mapNameId : " + mapNameId);
 
         //This will prevent to edit to an existing donation
-        for (String str : mapNameId.keySet())
-        {
+        for (String str : mapNameId.keySet()) {
             if (str.equalsIgnoreCase(donation.getName())) {
                 if (mapNameId.get(str).equals(donation.getId())) {
                     isDonationUpdatable = true;
