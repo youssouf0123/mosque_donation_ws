@@ -6,7 +6,15 @@ server:
     context-path: /mosque-donation
 ---
 spring:
-  profiles: local, default
+  config:
+    activate:
+      on-profile: local, default
+  sql:
+    init:
+      mode: always
+      platform: mysql
+  jpa:
+    defer-datasource-initialization: true
   servlet:
     multipart:
       enabled: true

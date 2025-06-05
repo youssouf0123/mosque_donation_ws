@@ -6,7 +6,9 @@ server:
     context-path: /mosque-donation
 ---
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: local
   servlet:
     multipart:
       enabled: true

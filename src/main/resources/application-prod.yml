@@ -6,7 +6,9 @@ server:
     context-path: /mosque-donation
 ---
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   servlet:
     multipart:
       enabled: true

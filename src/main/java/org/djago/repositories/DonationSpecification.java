@@ -1,9 +1,9 @@
 package org.djago.repositories;
 
+import jakarta.persistence.criteria.Predicate;
 import org.djago.model.Donation;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
