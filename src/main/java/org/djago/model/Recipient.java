@@ -36,7 +36,7 @@ public class Recipient extends AbstractEntity implements Serializable {
     @Column(name = "phone_number", length = 20, nullable = false)
 //	@Pattern(regexp = "\\+?[0-9\\-\\s]+", message = "Invalid phone number") // todo: validation
     private String phoneNumber;
-    @Comment("The unique username of the user")
+    @Comment("The Status of the Recipient")
     private Status status;
 
     enum Status {INDIGENT, WIDOW, ORPHAN}
