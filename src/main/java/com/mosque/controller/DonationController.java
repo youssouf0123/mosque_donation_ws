@@ -5,6 +5,10 @@ import com.mosque.model.Donation;
 import com.mosque.repositories.DonationSpecification;
 import com.mosque.service.DonationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +37,27 @@ public class DonationController {
     private DonationService donationService;
 
     //    GET /donations?page=0&size=10&filter=donorName:John,amount>100&sort=amount&order=desc
+//    Use the @Operation, @Parameter, and @Schema annotations for anything you want to show in Swagger/OpenAPI docs.
     @Operation(summary = "Get all donation objects", description = "Returns list of donations") // swagger annotation
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "Successful operation"),
+//            @ApiResponse(responseCode = "404", description = "User not found")
+//    })
     @GetMapping
     public Object getAllDonationsWithServerSidePagination(
+            @Parameter(description = "page number for pagination", required = true)
             @RequestParam(required = false) Integer page,
+
+            @Parameter(description = "page size for pagination", required = true)
             @RequestParam(required = false) Integer size,
+
+            @Parameter(description = "filter for filtering result", required = true)
             @RequestParam(required = false) String filter,
+
+            @Parameter(description = "sort column to be used", required = true)
             @RequestParam(required = false) String sort,
+
+            @Parameter(description = "order sort order (asc/desc)", required = true)
             @RequestParam(required = false) String order
     ) {
         if (page != null && size != null) {

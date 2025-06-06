@@ -15,3 +15,6 @@ INSERT INTO donation (name, phone, donation_type, quantity) VALUES
 ('Meta Vandervort', '7778889999', 'Clothes', 18),
 ('Joanne Leffler', '7778889999', 'Clothes', 18),
 ('Kristoffer Konopelski', '7778889999', 'Clothes', 18);
+
+INSERT INTO recipient (first_name, last_name, date_of_birth, phone_number, gender, status) VALUES
+('Nina', 'Leffler', '1985-07-23', '2404916237', 0, 0);
