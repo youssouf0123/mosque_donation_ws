@@ -4,6 +4,7 @@ import com.mosque.service.DonationTypeAndQty;
 import com.mosque.model.Donation;
 import com.mosque.repositories.DonationSpecification;
 import com.mosque.service.DonationService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,8 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
-//    GET /donations?page=0&size=10&filter=donorName:John,amount>100&sort=amount&order=desc
+    //    GET /donations?page=0&size=10&filter=donorName:John,amount>100&sort=amount&order=desc
+    @Operation(summary = "Get all donation objects", description = "Returns list of donations") // swagger annotation
     @GetMapping
     public Object getAllDonationsWithServerSidePagination(
             @RequestParam(required = false) Integer page,

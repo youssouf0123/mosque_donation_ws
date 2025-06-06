@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
+// Swagger (OpenAPI) Url => http://localhost:8081/mosque-donation/swagger-ui/index.html
+
 @Import(JpaConfiguration.class)
 @SpringBootApplication(scanBasePackages = { "com.mosque" })
 public class MosqueDonationApp {
