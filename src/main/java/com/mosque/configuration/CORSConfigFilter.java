@@ -1,4 +1,4 @@
-package org.djago.configuration;
+package com.mosque.configuration;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

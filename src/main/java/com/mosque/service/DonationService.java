@@ -1,8 +1,7 @@
-package org.djago.service;
+package com.mosque.service;
 
-import org.djago.model.Donation;
+import com.mosque.model.Donation;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 

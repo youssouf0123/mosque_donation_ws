@@ -1,7 +1,7 @@
-package org.djago.repositories;
+package com.mosque.repositories;
 
+import com.mosque.model.Donation;
 import jakarta.persistence.criteria.Predicate;
-import org.djago.model.Donation;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;

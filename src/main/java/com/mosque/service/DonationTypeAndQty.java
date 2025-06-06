@@ -1,4 +1,4 @@
-package org.djago.service;
+package com.mosque.service;
 
 
 public interface DonationTypeAndQty {

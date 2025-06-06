@@ -1,4 +1,4 @@
-package org.djago.model;
+package com.mosque.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

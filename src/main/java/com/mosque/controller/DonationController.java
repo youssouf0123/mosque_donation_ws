@@ -1,9 +1,9 @@
-package org.djago.controller;
+package com.mosque.controller;
 
-import org.djago.model.Donation;
-import org.djago.repositories.DonationSpecification;
-import org.djago.service.DonationService;
-import org.djago.service.DonationTypeAndQty;
+import com.mosque.service.DonationTypeAndQty;
+import com.mosque.model.Donation;
+import com.mosque.repositories.DonationSpecification;
+import com.mosque.service.DonationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

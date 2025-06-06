@@ -1,7 +1,7 @@
-package org.djago.repositories;
+package com.mosque.repositories;
 
-import org.djago.model.Donation;
-import org.djago.service.DonationTypeAndQty;
+import com.mosque.service.DonationTypeAndQty;
+import com.mosque.model.Donation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
