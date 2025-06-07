@@ -1,6 +1,6 @@
 package com.mosque.controller;
 
-import com.mosque.dto.RecipientDTO;
+import com.mosque.dto.RecipientRecord;
 import com.mosque.model.RecipientEntity;
 import com.mosque.repositories.RecipientSpecification;
 import com.mosque.service.RecipientService;
@@ -63,25 +63,25 @@ public class RecipientController {
             Specification<RecipientEntity> spec = RecipientSpecification.getFilterSpecification(filter);
             return recipientService.findAllWithFilter(spec, pageable);
         } else {
-            List<RecipientDTO> allRecipients = this.recipientService.findAllRecipients();
+            List<RecipientRecord> allRecipients = this.recipientService.findAllRecipients();
             logger.info(allRecipients.toString());
             return allRecipients;
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipientDTO> getRecipientById(@PathVariable("id") Long id) {
-        RecipientDTO recipient = this.recipientService.getRecipientById(id);
+    public ResponseEntity<RecipientRecord> getRecipientById(@PathVariable("id") Long id) {
+        RecipientRecord recipient = this.recipientService.getRecipientById(id);
         return new ResponseEntity<>(recipient, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> addRecipient(@RequestBody RecipientDTO recipient) {
+    public ResponseEntity<?> addRecipient(@RequestBody RecipientRecord recipient) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<RecipientDTO> updateRecipient(@RequestBody RecipientDTO recipient) {
+    public ResponseEntity<RecipientRecord> updateRecipient(@RequestBody RecipientRecord recipient) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -90,4 +90,5 @@ public class RecipientController {
         recipientService.deleteRecipient(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

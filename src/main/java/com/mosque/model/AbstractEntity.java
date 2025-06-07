@@ -19,15 +19,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import lombok.*;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
 @MappedSuperclass
 public class AbstractEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY allows you to leave IDs out of data.sql, instead of AUTO
 	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

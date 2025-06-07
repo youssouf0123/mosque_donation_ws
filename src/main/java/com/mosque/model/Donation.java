@@ -10,54 +10,43 @@ import java.io.Serializable;
 @Entity
 @Table(name = "donation")
 public class Donation extends AbstractEntity implements Serializable {
+    @NotEmpty
+    @Column
+    private String name;
+    private String phone;
+    private String donation_type;
+    private Integer quantity;
 
-	@NotEmpty
-	@Column
-	private String name;
-	private String phone;
-	private String donation_type;
-	private Integer quantity;
+    public String getName() {
+        return name;
+    }
 
-	public Donation() {
-		super();
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getDonation_type() {
+        return donation_type;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setDonation_type(String donation_type) {
+        this.donation_type = donation_type;
+    }
 
-	public String getDonation_type() {
-		return donation_type;
-	}
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-	public void setDonation_type(String donation_type) {
-		this.donation_type = donation_type;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	@Override
-	public String toString() {
-		return "Donation [id=" + super.getId() + ", name=" + name + ", phone=" + phone + ", donation_type=" + donation_type
-				+ ", quantity=" + quantity + "]";
-	}
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
 }

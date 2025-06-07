@@ -3,19 +3,12 @@ package com.mosque.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "recipient")
 public class RecipientEntity extends AbstractEntity implements Serializable {
@@ -38,7 +31,55 @@ public class RecipientEntity extends AbstractEntity implements Serializable {
     @Comment("The Status of the Recipient")
     private Status status;
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public enum Status {INDIGENT, WIDOW, ORPHAN}
 
-    public enum Gender { MALE, FEMALE }
+    public enum Gender {MALE, FEMALE}
 }
