@@ -1,3 +1,5 @@
+--https://sqldatagenerator.com/generator
+
 INSERT INTO donation (name, phone, donation_type, quantity) VALUES
 ('Julianne Kub', '1234567890', 'Clothes', 10),
 ('Tevin McKenzie', '0987654321', 'Rice', 20),
@@ -17,4 +19,18 @@ INSERT INTO donation (name, phone, donation_type, quantity) VALUES
 ('Kristoffer Konopelski', '7778889999', 'Clothes', 18);
 
 INSERT INTO recipient (first_name, last_name, date_of_birth, phone_number, gender, status) VALUES
-('Nina', 'Leffler', '1985-07-23', '2404916237', 0, 0);
+('Nina', 'Leffler', '1970-01-01', '1112223333', 1, 0),
+('Kristoffer', 'Konopelski', '1970-01-01', '1112223333', 0, 1),
+('Odie', 'Frami', '1970-01-01', '1112223333', 0, 2),
+('Rashawn', 'Stokes', '1970-01-01', '1112223333', 0, 3),
+('Jordan', 'Gutkowski', '1970-01-01', '1112223333', 0, 0),
+('Kurt', 'Davis', '1970-01-01', '1112223333', 0, 1),
+('Nina', 'Funk', '1970-01-01', '1112223333', 1, 2),
+('Jettie', 'Miller', '1970-01-01', '1112223333', 0, 3),
+('Davion', 'Heathcote', '1970-01-01', '1112223333', 0, 0),
+('Letitia', 'Sanford', '1970-01-01', '1112223333', 1, 1),
+('Mckenna', 'Mann', '1970-01-01', '1112223333', 1, 2),
+('Zoe', 'Upton', '1970-01-01', '1112223333', 0, 3),
+('Minerva', 'Conroy', '1970-01-01', '1112223333', 0, 0),
+('Ashly', 'Heller', '1970-01-01', '1112223333', 1, 1),
+('Marguerite', 'Wiegand', '1970-01-01', '1112223333', 1, 2);

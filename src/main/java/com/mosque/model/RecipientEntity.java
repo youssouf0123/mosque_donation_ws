@@ -13,9 +13,9 @@ import java.time.LocalDate;
 @Table(name = "recipient")
 public class RecipientEntity extends AbstractEntity implements Serializable {
 
-//	LocalDate (from java.time) is type-safe and represents a date without time.
-//	It's JPA-compliant and maps well to SQL DATE.
-//	Avoids problems with parsing and formatting strings.
+    //	LocalDate (from java.time) is type-safe and represents a date without time.
+    //	It's JPA-compliant and maps well to SQL DATE.
+    //	Avoids problems with parsing and formatting strings.
 
     @NotEmpty
     @Column(name = "first_name", nullable = false)
@@ -79,7 +79,7 @@ public class RecipientEntity extends AbstractEntity implements Serializable {
         this.status = status;
     }
 
-    public enum Status {INDIGENT, WIDOW, ORPHAN}
+    public enum Status {INDIGENT, WIDOW, ORPHAN, REGULAR}
 
     public enum Gender {MALE, FEMALE}
 }

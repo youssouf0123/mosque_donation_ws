@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"http://localhost:4200", "http://mande-dev.com"}, maxAge = 3600)
 @RestController
-@RequestMapping("/api/v1/donation")
+@RequestMapping("/api/v1/donations")
 public class DonationController {
 
     private static final Logger logger = LoggerFactory.getLogger(DonationController.class);

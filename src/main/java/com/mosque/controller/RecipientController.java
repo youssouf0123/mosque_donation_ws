@@ -21,7 +21,7 @@ import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:4200", "http://mande-dev.com"}, maxAge = 3600)
 @RestController
-@RequestMapping("/api/v1/recipient")
+@RequestMapping("/api/v1/recipients")
 public class RecipientController {
 
     private static final Logger logger = LoggerFactory.getLogger(RecipientController.class);
