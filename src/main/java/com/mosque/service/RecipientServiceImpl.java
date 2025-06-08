@@ -1,7 +1,7 @@
 package com.mosque.service;
 
-import com.mosque.dto.RecipientRecord;
-import com.mosque.mapper.RecipientRecordMapper;
+import com.mosque.dto.RecipientDTO;
+import com.mosque.mapper.RecipientDTOMapper;
 import com.mosque.model.RecipientEntity;
 import com.mosque.repositories.RecipientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,49 +21,49 @@ public class RecipientServiceImpl implements RecipientService {
     RecipientRepository recipientRepository;
 
     @Override
-    public Page<RecipientRecord> findAllWithFilter(Specification<RecipientEntity> spec, Pageable pageable) {
+    public Page<RecipientDTO> findAllWithFilter(Specification<RecipientEntity> spec, Pageable pageable) {
 
         Page<RecipientEntity> page = recipientRepository
                 .findAll(spec, pageable);
 
-        return page.map(RecipientRecordMapper::toDto);
+        return page.map(RecipientDTOMapper::toDto);
     }
 
     @Override
-    public List<RecipientRecord> findAllRecipients() {
-        return RecipientRecordMapper.toDto(recipientRepository.findAll());
+    public List<RecipientDTO> findAllRecipients() {
+        return RecipientDTOMapper.toDto(recipientRepository.findAll());
     }
 
     @Override
-    public RecipientRecord getRecipientById(Long id) {
+    public RecipientDTO getRecipientById(Long id) {
 
         RecipientEntity recipient = recipientRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("id is not found"));
 
-        return RecipientRecordMapper.toDto(recipient);
+        return RecipientDTOMapper.toDto(recipient);
     }
 
     @Override
     @Transactional
-    public RecipientRecord addRecipient(RecipientRecord recipient) {
+    public RecipientDTO addRecipient(RecipientDTO recipient) {
 
         RecipientEntity entity = recipientRepository
-                .save(RecipientRecordMapper.toEntity(recipient));
+                .save(RecipientDTOMapper.toEntity(recipient));
 
-        return RecipientRecordMapper.toDto(entity);
+        return RecipientDTOMapper.toDto(entity);
     }
 
     @Override
-    public RecipientRecord updateRecipient(RecipientRecord recipientDTO) {
+    public RecipientDTO updateRecipient(RecipientDTO recipientDTO) {
 
         if (!recipientRepository.findById(recipientDTO.id()).isPresent()) {
             throw (new RuntimeException("id is not found"));
         }
 
         RecipientEntity entity = recipientRepository
-                .save(RecipientRecordMapper.toEntity(recipientDTO));
+                .save(RecipientDTOMapper.toEntity(recipientDTO));
 
-        return RecipientRecordMapper.toDto(entity);
+        return RecipientDTOMapper.toDto(entity);
     }
 
     @Override

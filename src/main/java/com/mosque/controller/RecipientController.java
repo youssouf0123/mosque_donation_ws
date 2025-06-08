@@ -1,6 +1,6 @@
 package com.mosque.controller;
 
-import com.mosque.dto.RecipientRecord;
+import com.mosque.dto.RecipientDTO;
 import com.mosque.model.RecipientEntity;
 import com.mosque.repositories.RecipientSpecification;
 import com.mosque.service.RecipientService;
@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,16 @@ import java.util.List;
 @RequestMapping("/api/v1/recipients")
 public class RecipientController {
 
+    /**
+     * 5️⃣ Optional: Use an Idempotency-Key
+     * In more advanced APIs, clients send a header:
+
+     * Idempotency-Key: 123e4567-e89b-12d3-a456-426614174000
+     * Your backend stores this key and result → if same key is sent again, it returns the same response without re-processing.
+     * This is how Stripe API works for example → allows safe retries on POST.
+     * If you want, I can show you how to add Idempotency-Key support to your POST method → it's a cool pattern.
+
+     * */
     private static final Logger logger = LoggerFactory.getLogger(RecipientController.class);
 
     @Autowired
@@ -37,7 +48,7 @@ public class RecipientController {
 //            @ApiResponse(responseCode = "404", description = "User not found")
 //    })
     @GetMapping
-    public Object getAllDonationsWithServerSidePagination(
+    public Object getAllRecipients(
             @Parameter(description = "page number for pagination", required = true)
             @RequestParam(required = false) Integer page,
 
@@ -57,38 +68,67 @@ public class RecipientController {
             Pageable pageable = PageRequest.of(
                     page,
                     size,
-                    order != null && sort != null ?
-                            Sort.by(Sort.Direction.fromString(order), sort) : Sort.unsorted()
+                    (order != null && sort != null)
+                            ? Sort.by(Sort.Direction.fromString(order), sort)
+                            : Sort.unsorted()
             );
+
             Specification<RecipientEntity> spec = RecipientSpecification.getFilterSpecification(filter);
-            return recipientService.findAllWithFilter(spec, pageable);
+            Page<RecipientDTO> resultPage = recipientService.findAllWithFilter(spec, pageable);
+
+            return ResponseEntity.ok(resultPage);
         } else {
-            List<RecipientRecord> allRecipients = this.recipientService.findAllRecipients();
-            logger.info(allRecipients.toString());
-            return allRecipients;
+            List<RecipientDTO> recipients = recipientService.findAllRecipients();
+            return ResponseEntity.ok(recipients);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipientRecord> getRecipientById(@PathVariable("id") Long id) {
-        RecipientRecord recipient = this.recipientService.getRecipientById(id);
-        return new ResponseEntity<>(recipient, HttpStatus.OK);
+    public ResponseEntity<RecipientDTO> getRecipientById(@PathVariable("id") Long id) {
+        RecipientDTO recipient = this.recipientService.getRecipientById(id);
+        return ResponseEntity.ok(recipient);
     }
 
     @PostMapping
-    public ResponseEntity<?> addRecipient(@RequestBody RecipientRecord recipient) {
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<RecipientDTO> addRecipient(@RequestBody RecipientDTO recipientDto) {
+
+        // todo: responses to return: 201 Created, 409 Conflict, 400 Bad Request
+
+        // Example: Check if unique field in recipient exists
+//        if (recipientService.existsByEmail(recipientDto.getEmail())) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body("Recipient with this email already exists.");
+//        }
+
+        // todo: How to make the add method Idempotent!
+        // todo: This way, if the client retries POST (e.g. after timeout), it won’t create duplicates — very useful for systems
+        //  where clients retry on error.
+        // Check if recipient with same email already exists
+//        Optional<RecipientDTO> existing = recipientService.findByEmail(recipientDto.getEmail());
+//        if (existing.isPresent()) {
+//            // Return 200 OK with existing recipient → makes this POST idempotent-like
+//            return ResponseEntity.ok(existing.get());
+//        }
+
+        RecipientDTO savedRecipient = recipientService.addRecipient(recipientDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(savedRecipient);
     }
 
-    @PutMapping
-    public ResponseEntity<RecipientRecord> updateRecipient(@RequestBody RecipientRecord recipient) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<RecipientDTO> updateRecipient(@RequestBody RecipientDTO recipientDto) {
+//    public ResponseEntity<RecipientDTO> updateRecipient(@PathVariable("id") Long id, @RequestBody RecipientDTO recipientDto) { // todo: preferred method to pass ID in URL!
+
+        // todo: Extra tip: you can validate that the resource exists first, to avoid creating accidentally.
+        RecipientDTO updatedRecipient = recipientService.updateRecipient(recipientDto);
+        return ResponseEntity.ok(updatedRecipient);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRecipient(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteRecipient(@PathVariable("id") Long id) {
         recipientService.deleteRecipient(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.noContent().build(); // 204 No Content is preferred for delete
     }
 
 }

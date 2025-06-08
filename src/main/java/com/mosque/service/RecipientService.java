@@ -1,6 +1,6 @@
 package com.mosque.service;
 
-import com.mosque.dto.RecipientRecord;
+import com.mosque.dto.RecipientDTO;
 import com.mosque.model.RecipientEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface RecipientService {
 
-    public Page<RecipientRecord> findAllWithFilter(Specification<RecipientEntity> spec, Pageable pageable);
+    public Page<RecipientDTO> findAllWithFilter(Specification<RecipientEntity> spec, Pageable pageable);
 
-    public List<RecipientRecord> findAllRecipients();
+    public List<RecipientDTO> findAllRecipients();
 
-    public RecipientRecord getRecipientById(Long id);
+    public RecipientDTO getRecipientById(Long id);
 
-    public RecipientRecord addRecipient(RecipientRecord recipientDTO);
+    public RecipientDTO addRecipient(RecipientDTO recipientDTO);
 
-    public RecipientRecord updateRecipient(RecipientRecord recipientDTO);
+    public RecipientDTO updateRecipient(RecipientDTO recipientDTO);
 
     public void deleteRecipient(Long id);
 }

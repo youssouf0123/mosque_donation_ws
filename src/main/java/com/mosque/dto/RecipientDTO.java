@@ -4,7 +4,7 @@ import com.mosque.model.RecipientEntity;
 
 import java.time.LocalDate;
 
-public record RecipientRecord(
+public record RecipientDTO(
         Long id,
         String firstName,
         String lastName,
@@ -61,8 +61,8 @@ public record RecipientRecord(
             return this;
         }
 
-        public RecipientRecord build() {
-            return new RecipientRecord(id, firstName, lastName, dateOfBirth, gender, phoneNumber, status);
+        public RecipientDTO build() {
+            return new RecipientDTO(id, firstName, lastName, dateOfBirth, gender, phoneNumber, status);
         }
     }
 }

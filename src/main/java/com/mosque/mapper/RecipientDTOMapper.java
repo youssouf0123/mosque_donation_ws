@@ -1,16 +1,16 @@
 package com.mosque.mapper;
 
-import com.mosque.dto.RecipientRecord;
+import com.mosque.dto.RecipientDTO;
 import com.mosque.model.RecipientEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 //@Mapper(componentModel = "spring") // IMPORTANT: enables Spring injection
-public class RecipientRecordMapper {
+public class RecipientDTOMapper {
 
-    public static RecipientRecord toDto(RecipientEntity entity) {
-        return RecipientRecord.builder()
+    public static RecipientDTO toDto(RecipientEntity entity) {
+        return RecipientDTO.builder()
                 .id(entity.getId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
@@ -21,23 +21,23 @@ public class RecipientRecordMapper {
                 .build();
     }
 
-    public static List<RecipientRecord> toDto(List<RecipientEntity> entities) {
+    public static List<RecipientDTO> toDto(List<RecipientEntity> entities) {
         return entities
                 .stream()
-                .map(RecipientRecordMapper::toDto)
+                .map(RecipientDTOMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public static RecipientEntity toEntity(RecipientRecord recipientRecord) {
+    public static RecipientEntity toEntity(RecipientDTO recipientDTO) {
 
         RecipientEntity recipient = new RecipientEntity();
-        recipient.setId(recipientRecord.id());
-        recipient.setFirstName(recipientRecord.firstName());
-        recipient.setLastName(recipientRecord.lastName());
-        recipient.setDateOfBirth(recipientRecord.dateOfBirth());
-        recipient.setGender(recipientRecord.gender());
-        recipient.setPhoneNumber(recipientRecord.phoneNumber());
-        recipient.setStatus(recipientRecord.status());
+        recipient.setId(recipientDTO.id());
+        recipient.setFirstName(recipientDTO.firstName());
+        recipient.setLastName(recipientDTO.lastName());
+        recipient.setDateOfBirth(recipientDTO.dateOfBirth());
+        recipient.setGender(recipientDTO.gender());
+        recipient.setPhoneNumber(recipientDTO.phoneNumber());
+        recipient.setStatus(recipientDTO.status());
 
         return recipient;
     }
