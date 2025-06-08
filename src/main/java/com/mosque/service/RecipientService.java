@@ -7,12 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RecipientService {
 
     public Page<RecipientDTO> findAllWithFilter(Specification<RecipientEntity> spec, Pageable pageable);
 
     public List<RecipientDTO> findAllRecipients();
+
+    public Optional<RecipientDTO> findByPhoneNumber(String phoneNumber);
 
     public RecipientDTO getRecipientById(Long id);
 

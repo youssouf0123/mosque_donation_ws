@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("recipientService")
-@Transactional
 public class RecipientServiceImpl implements RecipientService {
 
     @Autowired
@@ -35,10 +35,17 @@ public class RecipientServiceImpl implements RecipientService {
     }
 
     @Override
+    public Optional<RecipientDTO> findByPhoneNumber(String phoneNumber) {
+        return this
+                .recipientRepository.findByPhoneNumber(phoneNumber)
+                .map(RecipientDTOMapper::toDto);
+    }
+
+    @Override
     public RecipientDTO getRecipientById(Long id) {
 
         RecipientEntity recipient = recipientRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("id is not found"));
+                orElseThrow(() -> new RuntimeException(String.format("Recipient with Id: %d is not found", id)));
 
         return RecipientDTOMapper.toDto(recipient);
     }
@@ -47,17 +54,18 @@ public class RecipientServiceImpl implements RecipientService {
     @Transactional
     public RecipientDTO addRecipient(RecipientDTO recipient) {
 
-        RecipientEntity entity = recipientRepository
-                .save(RecipientDTOMapper.toEntity(recipient));
+        RecipientEntity entity = RecipientDTOMapper.toEntity(recipient);
 
-        return RecipientDTOMapper.toDto(entity);
+        RecipientEntity savedEntity = recipientRepository.save(entity);
+
+        return RecipientDTOMapper.toDto(savedEntity);
     }
 
     @Override
     public RecipientDTO updateRecipient(RecipientDTO recipientDTO) {
 
-        if (!recipientRepository.findById(recipientDTO.id()).isPresent()) {
-            throw (new RuntimeException("id is not found"));
+        if (recipientRepository.findById(recipientDTO.id()).isEmpty()) {
+            throw (new RuntimeException(String.format("Recipient with Id: %d is not found", recipientDTO.id())));
         }
 
         RecipientEntity entity = recipientRepository

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:4200", "http://mande-dev.com"}, maxAge = 3600)
 @RestController
@@ -28,13 +29,12 @@ public class RecipientController {
     /**
      * 5️⃣ Optional: Use an Idempotency-Key
      * In more advanced APIs, clients send a header:
-
+     * <p>
      * Idempotency-Key: 123e4567-e89b-12d3-a456-426614174000
      * Your backend stores this key and result → if same key is sent again, it returns the same response without re-processing.
      * This is how Stripe API works for example → allows safe retries on POST.
      * If you want, I can show you how to add Idempotency-Key support to your POST method → it's a cool pattern.
-
-     * */
+     */
     private static final Logger logger = LoggerFactory.getLogger(RecipientController.class);
 
     @Autowired
@@ -91,24 +91,13 @@ public class RecipientController {
 
     @PostMapping
     public ResponseEntity<RecipientDTO> addRecipient(@RequestBody RecipientDTO recipientDto) {
+        // todo: 400 Bad Request (when validation errors, etc)
+        Optional<RecipientDTO> existing = recipientService.findByPhoneNumber(recipientDto.phoneNumber());
 
-        // todo: responses to return: 201 Created, 409 Conflict, 400 Bad Request
-
-        // Example: Check if unique field in recipient exists
-//        if (recipientService.existsByEmail(recipientDto.getEmail())) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body("Recipient with this email already exists.");
-//        }
-
-        // todo: How to make the add method Idempotent!
-        // todo: This way, if the client retries POST (e.g. after timeout), it won’t create duplicates — very useful for systems
-        //  where clients retry on error.
-        // Check if recipient with same email already exists
-//        Optional<RecipientDTO> existing = recipientService.findByEmail(recipientDto.getEmail());
-//        if (existing.isPresent()) {
-//            // Return 200 OK with existing recipient → makes this POST idempotent-like
-//            return ResponseEntity.ok(existing.get());
-//        }
+        if (existing.isPresent()) {
+            // Return 200 OK with existing recipient → makes this POST idempotent-like
+            return ResponseEntity.ok(existing.get());
+        }
 
         RecipientDTO savedRecipient = recipientService.addRecipient(recipientDto);
         return ResponseEntity
@@ -119,7 +108,6 @@ public class RecipientController {
     @PutMapping("/{id}")
     public ResponseEntity<RecipientDTO> updateRecipient(@RequestBody RecipientDTO recipientDto) {
 //    public ResponseEntity<RecipientDTO> updateRecipient(@PathVariable("id") Long id, @RequestBody RecipientDTO recipientDto) { // todo: preferred method to pass ID in URL!
-
         // todo: Extra tip: you can validate that the resource exists first, to avoid creating accidentally.
         RecipientDTO updatedRecipient = recipientService.updateRecipient(recipientDto);
         return ResponseEntity.ok(updatedRecipient);
